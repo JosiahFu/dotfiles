@@ -1,0 +1,77 @@
+#!/bin/sh
+
+alias :q='exit'
+alias clock='termdown -z'
+alias multipipe='bash-pipes -p 7 -K -r 4000 -f 30'
+alias nc='ncat'
+alias winlock='i3lock --pointer=win -u -i ~/Pictures/windows.png'
+alias woljeremy='wol 34:E6:D7:03:CF:52'
+alias chromewifi='iwctl station wlan0 connect DaVinci-Chrome-1'
+
+alias revssh='ssh jeremy -R 2322:localhost:22 -N'
+
+alias bat_check='~/Code/scripts/bat_check.sh'
+alias scrn='~/Code/scripts/scrn.sh'
+alias vfish='~/Code/scripts/vimfish.sh'
+
+ddg () { 
+    if [ -n $1 ]; then
+        lynx "https://lite.duckduckgo.com/lite?q=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.stdin.read()))" <<< "$@")";
+    else
+        lynx "https://lite.duckduckgo.com/lite";
+    fi
+}
+lesspdf () { 
+    pdftotext -layout "$1" - | less
+}
+neofetch () { 
+    if [ $TERM = linux ]; then
+        command neofetch "$@" | sed 's/\[48/[5;48/g';
+    else
+        command neofetch "$@";
+    fi
+}
+shriek () { 
+    if [ -f ~/Music/Sculk_shrieker_shriek$1.ogg ]; then
+        play ~/Music/Sculk_shrieker_shriek$1.ogg;
+    else
+        play ~/Music/Sculk_shrieker_shriek$((RANDOM%5+1)).ogg;
+    fi
+}
+sl () { 
+    echo -en "\e[?1049h";
+    command sl "$@";
+    echo -en "\e[?1049l";
+    ls "$@"
+}
+sshvnc () { 
+    vncviewer -via jeremy localhost::${1:-5901} $([ "$1" = "5901" ] && echo "-passwd ~/.vnc/passwd") -Fullscreen
+}
+which () { 
+    ( alias;
+    declare -f ) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot $@
+}
+declare -fx which
+whiteboard () { 
+    urxvt -bg "[0]#000000" +sb -e bash -c "i3-msg border none 2>&1 > /dev/null ; \"${@:-vim}\""
+}
+wiki () { 
+    [ -z "$1" ] && lynx "https://wiki.archlinux.org" && return;
+    echo "Checking if page exists...";
+    if wget --spider "https://wiki.archlinux.org/title/$(echo "$@" | tr " " "_")" 2> /dev/null; then
+        lynx "https://wiki.archlinux.org/title/$(echo "$@" | tr " " "_")" 
+        return
+    fi
+    echo "Using wiki search";
+    lynx "https://wiki.archlinux.org/index.php?search=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.stdin.read()))" <<< "$@")&title=Special%3ASearch&fulltext=Search"
+}
+
+app-ff () {
+    if [ -z $DISPLAY ]; then
+        desktop=app-ff appurl="$@" startx
+        return
+    fi
+    firefox -p Apps --new-window "$@"
+}
+
+alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'

@@ -1,0 +1,30 @@
+#!/bin/bash
+
+#PS1='[\[\e[96m\]\u\[\e[0m\]@\h \w]\$ '
+#PS1='[\[\e[92m\]\u\[\e[39m\]@\[\e[96;1m\]\h\[\e[39;22m\] \[\e[94m\]\w\[\e[39m\]]\$ '
+
+PS1=''
+if [[ "$TERM" == "tmux"* ]]; then
+    PS1+='\[\e[32m\][' # green
+else
+    PS1+='\[\e[90m\][' # dark gray
+fi
+PS1+='\[\e[96m\]\u' # cyan
+PS1+='\[\e[90m\]@' # dark gray
+if [ -n "$SSH_CLIENT" -o -n "$SSH_CONNECTION" -o -n "$SSH_TTY" ]; then
+    PS1+='\[\e[92m\]\h ' # light green
+else
+    PS1+='\[\e[0m\]\h ' # white
+fi
+if [ "$TERM" = "linux" ]; then
+    PS1+='\[\e[1;34m\]\w' # dark blue
+else
+    PS1+='\[\e[34m\]\w\[\e[22m\]' # light (bold) blue
+fi
+if [[ "$TERM" == "tmux"* ]]; then
+    PS1+='\[\e[32m\]]' # green
+else
+    PS1+='\[\e[90m\]]' # dark gray
+fi
+PS1+='\[\e[92m\]\$\[\e[0m\] ' # light green
+

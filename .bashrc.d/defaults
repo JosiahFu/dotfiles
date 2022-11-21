@@ -1,0 +1,30 @@
+#!/bin/sh
+
+alias figlet='figlet -t'
+alias mv='mv -i'
+alias cp='cp -i'
+alias espeak='espeak -s 125'
+alias termdown='termdown -a -W -f contessa'
+alias nc='ncat'
+alias qrencode='qrencode -o - -t ANSI256UTF8 -v 2'
+alias pdftotext='pdftotext -layout -nopgbrk'
+alias cd..='cd ..'
+alias cd~='cd ~'
+
+sl() {
+    echo -en "\e[?1049h"
+    command sl "$@"
+    echo -en "\e[?1049l"
+    ls "$@"
+}
+neofetch() {
+    if [ $TERM = linux ]; then
+        command neofetch "$@" | sed 's/\[48/[5;48/g'
+    else
+        command neofetch "$@"
+    fi
+}
+which () {
+    (alias; declare -f) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot $@
+}
+export -f which
