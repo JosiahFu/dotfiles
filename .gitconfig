@@ -1,0 +1,14 @@
+[init]
+	defaultBranch = main
+[user]
+	email = josiahfu@gmail.com
+	name = JosiahFu
+[credential]
+	helper = store
+[pull]
+	rebase = true
+[alias]
+	graph = log --graph --oneline --all --date-order
+
+[push]
+	autoSetupRemote = true
