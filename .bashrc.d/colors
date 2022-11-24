@@ -1,9 +1,0 @@
-#!/bin/sh
-
-alias ls='ls --color=auto'
-alias tree='tree -C'
-alias diff='diff --color=auto'
-alias grep='grep --color=auto'
-alias ip='ip -color=auto'
-#export LESS='-R --use-color -Dd+w$Du+c'
-export MANPAGER="less -R --use-color -Dd+w -Du+c"
