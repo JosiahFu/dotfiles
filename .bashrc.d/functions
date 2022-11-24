@@ -8,8 +8,6 @@ alias winlock='i3lock --pointer=win -u -i ~/Pictures/windows.png'
 alias woljeremy='wol 34:E6:D7:03:CF:52'
 alias chromewifi='iwctl station wlan0 connect DaVinci-Chrome-1'
 
-alias revssh='ssh jeremy -R 2322:localhost:22 -N'
-
 alias bat_check='~/Code/scripts/bat_check.sh'
 alias scrn='~/Code/scripts/scrn.sh'
 alias vfish='~/Code/scripts/vimfish.sh'
