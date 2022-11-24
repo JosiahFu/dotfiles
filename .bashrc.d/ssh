@@ -1,0 +1,1 @@
+alias mntsshdocs='sshfs avalon:Documents Documents/ -o idmap=user -o ServerAliveInterval=15'
