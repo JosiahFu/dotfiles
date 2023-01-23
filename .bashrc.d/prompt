@@ -9,7 +9,7 @@ if [[ "$TERM" == "tmux"* ]]; then
 else
     PS1+='\[\e[90m\][' # dark gray
 fi
-PS1+='\[\e[96m\]\u' # cyan
+PS1+='\[\e[95m\]\u' # purple
 PS1+='\[\e[90m\]@' # dark gray
 if [ -n "$SSH_CLIENT" -o -n "$SSH_CONNECTION" -o -n "$SSH_TTY" ]; then
     PS1+='\[\e[92m\]\h ' # light green
@@ -22,9 +22,9 @@ else
     PS1+='\[\e[34m\]\w\[\e[22m\]' # light (bold) blue
 fi
 if [[ "$TERM" == "tmux"* ]]; then
-    PS1+='\[\e[32m\]]' # green
+    PS1+='\[\e[95m\]]' # green
 else
     PS1+='\[\e[90m\]]' # dark gray
 fi
-PS1+='\[\e[92m\]\$\[\e[0m\] ' # light green
+PS1+='\[\e[94m\]\$\[\e[0m\] ' # light blue
 

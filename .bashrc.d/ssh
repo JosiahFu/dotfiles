@@ -1,3 +1,0 @@
-#!/bin/sh
-alias mntsshdocs='sshfs avalon:Documents Documents/ -o idmap=user -o ServerAliveInterval=15'
-alias revssh='ssh jeremy -R 2322:localhost:22 -N'
