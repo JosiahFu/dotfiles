@@ -1,0 +1,158 @@
+#!/bin/sh
+
+randsound () {
+  # Set default values
+  local volume=1
+  local pitch=
+  local incompatible_flag=false
+
+  # Check for mandatory positional arguments
+  if [ $# -lt 4 ]; then
+    echo "Usage: generate_music <name> <pitch_min> <pitch_max> <count> [-v <volume>| -L] [-s <pitch>] [<chosen>]" >&2
+    return 1
+  fi
+
+  # Parse mandatory positional arguments
+  local name=$1
+  local pitch_min=$2
+  local pitch_max=$3
+  local count=$4
+  local chosen=
+  shift 4
+
+  # Parse optional positional argument
+  if [[ $# -ge 1 && "$1" != -* ]]; then
+    chosen=$1
+    shift 1
+  else
+    chosen=$((RANDOM%count+1))
+  fi
+
+  local OPTIND opt
+
+  # Parse flag arguments
+  while getopts "v:Ls:" opt; do
+    case $opt in
+      v)
+        volume=$OPTARG
+        ;;
+      L)
+        volume=8
+        incompatible_flag=true
+        ;;
+      s)
+        pitch=$OPTARG
+        ;;
+      \?)
+        echo "Invalid option: -$OPTARG" >&2
+        exit 1
+        ;;
+      :)
+        echo "Option -$OPTARG requires an argument." >&2
+        exit 1
+        ;;
+    esac
+  done
+
+  # Check if incompatible flags were set
+  if [ "$incompatible_flag" = true ] && [ "$volume" -ne 8 ]; then
+    echo "-L flag is incompatible with -v flag. Please use only one of them." >&2
+    return 1
+  fi
+
+  # Generate random pitch if s flag is not provided
+  if [ -z "$pitch" ]; then
+      pitch=`bc <<< "0.1 * ($RANDOM % (10 * ($pitch_max - $pitch_min)) + 10 * $pitch_min)"`
+  fi
+
+  echo "Generating music with name: $name, pitch min: $pitch_min, pitch max: $pitch_max count: $count, chosen: $chosen, volume: $volume, pitch: $pitch"
+  play -v $volume "~/Music/$name$chosen.ogg" speed $pitch
+}
+
+#     local name=$1
+#     local pitch_range=$2
+#     local count=$3
+#     local chosen=$4
+# 
+#     # Set default values
+#     local volume=1
+#     local speed=
+# 
+#     # Parse options
+#     while getopts ":v:Ls:" opt; do
+#       case $opt in
+#         v)
+#           volume=$OPTARG
+#           ;;
+#         L)
+#           volume=8
+#           ;;
+#         s)
+#           speed=$OPTARG
+#           ;;
+#         \?)
+#           echo "Invalid option: -$OPTARG" >&2
+#           return 1
+#           ;;
+#         :)
+#           echo "Option -$OPTARG requires an argument." >&2
+#           return 1
+#           ;;
+#       esac
+#     done
+# 
+#     # Shift past the parsed options
+#     shift $((OPTIND - 1))
+# 
+#     # Parse required arguments
+#     if [ $# -lt 3 ]; then
+#       echo "Usage: $0 <name> <pitch_range> <count>" >&2
+#       return 1
+#     fi
+# 
+#     # Generate random number if chosen is not provided
+#     if [ -z "$chosen" ]; then
+#       chosen=$((RANDOM % count + 1))
+#     fi
+# 
+#     # Generate random pitch if s flag is not provided
+#     if [ -z "$speed" ]; then
+#         speed=`bc <<< "1 - 0.1 * ($RANDOM % (20 * $pitch_range) - 10 * $pitch_range)"`
+#     fi
+# 
+#     play -v $volume "~/Music/$name$chosen.ogg" speed $speed
+# }
+
+# shriek () { 
+#     speed=${2:-`bc <<< "1 - 0.1 * ($RANDOM % 5)"`}
+#     if [ "$1" = "-L" ]; then
+#         play ~/Music/test.ogg speed $speed
+#     elif [ -f ~/Music/Sculk_shrieker_shriek$1.ogg ]; then
+#         play ~/Music/Sculk_shrieker_shriek$1.ogg speed $speed
+#     else
+#         play ~/Music/Sculk_shrieker_shriek$((RANDOM%5+1)).ogg speed $speed
+#     fi
+# }
+
+# scream () { 
+#     if [ -f ~/Music/Goat_scream$1.ogg ]; then
+#         play ~/Music/Goat_scream$1.ogg;
+#     else
+#         play ~/Music/Goat_scream$((RANDOM%8+1)).ogg;
+#     fi
+# }
+shrek() {
+    catimg -H ~/Pictures/th-1877675537.jpg
+    play ~/Music/swamp.mp3 2> /dev/null > /dev/null
+}
+# screech () { 
+#     if [ -f ~/Music/Phantom_swoop$1.ogg ]; then
+#         play ~/Music/Phantom_swoop$1.ogg;
+#     else
+#         play ~/Music/Phantom_swoop$((RANDOM%4+1)).ogg;
+#     fi
+# }
+
+alias shriek='randsound Sculk_shrieker_shriek 0.6 1 5'
+alias scream='randsound Goat_scream 0.8 1.2 8'
+alias screech='randsound Phantom_swoop 0.9 1.1 4'
